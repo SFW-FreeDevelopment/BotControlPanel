@@ -32,7 +32,12 @@ namespace BotControlPanel.App
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<BotService>();
-            services.AddTransient(_ => new ConnectionInfo(_configuration["Server:Host"], _configuration["Server:Username"]));
+
+            var host = _configuration["Server:Host"];
+            var username = _configuration["Server:Username"];
+            var password = _configuration["Server:Password"];
+            var auth = new PasswordAuthenticationMethod(username, password);
+            services.AddTransient(_ => new ConnectionInfo(host, username, auth));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
