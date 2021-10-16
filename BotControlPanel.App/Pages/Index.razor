@@ -5,22 +5,27 @@
 <h1>Control Panel</h1>
 <hr/>
 
-<div id="stats">
-    <h2>Stats</h2>
-    <p>Coming soon...</p>
-</div>
-<hr/>
-
-<div id="commands">
-    <h2>Commands</h2>
-    
-    <h3>Stop Bot</h3>
-    <button class="btn btn-danger" @onclick="KillContainers">Kill All</button><br/><br/>
-    
-    <h3>Start Bot</h3>
-    <button class="btn btn-success" @onclick='() => StartContainer("docbot")'>Start DocBot</button>
-    <button class="btn btn-success" @onclick='() => StartContainer("dogbot")'>Start DogBot</button>
-    <button class="btn btn-success" @onclick='() => StartContainer("colorbot")'>Start ColorBot</button>
+<div class="row">
+    <div class="col-md-6">
+      <div id="stats">
+          <h2>Stats</h2>
+          <p>Coming soon...</p>
+      </div>
+      <hr/>
+      
+      <div id="commands">
+          <h2>Commands</h2>
+          
+          <h3>Stop Bot</h3>
+          <button class="btn btn-lg btn-danger btn-block" @onclick="KillContainers">Stop All</button><br/>
+          
+          <h3>Start Bot</h3>
+          <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("sgarberg/colorbot")'>Start ColorBot</button><br/>
+          <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("sgarberg/docbot")'>Start DocBot</button><br/>
+          <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("sgarberg/dogbot")'>Start DogBot</button><br/>
+          <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("chrisplummer/meltybot")'>Start MeltyBot</button>
+      </div>  
+    </div>
 </div>
 
 @code
