@@ -2,17 +2,13 @@
 @using BotControlPanel.App.Services
 @inject BotService _botService
 
-<h1>Hello, world!</h1>
+<h1>Control Panel</h1>
 
-Welcome to your new app.
+<button class="btn btn-danger" @onclick="KillContainers">Kill containers</button><br/><br/>
 
-<SurveyPrompt Title="How is Blazor working for you?"/>
-
-<butto class="btn btn-primary" @onclick="KillContainers">Kill containers</butto>
-
-<button class="btn btn-primary" @onclick='() => StartContainer("docbot")'>Start DocBot</button>
-<button class="btn btn-primary" @onclick='() => StartContainer("dogbot")'>Start DogBot</button>
-<button class="btn btn-primary" @onclick='() => StartContainer("colorbot")'>Start ColorBot</button>
+<button class="btn btn-success" @onclick='() => StartContainer("docbot")'>Start DocBot</button> 
+<button class="btn btn-success" @onclick='() => StartContainer("dogbot")'>Start DogBot</button> 
+<button class="btn btn-success" @onclick='() => StartContainer("colorbot")'>Start ColorBot</button>
 
 @code
 {
