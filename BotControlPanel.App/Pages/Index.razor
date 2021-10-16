@@ -3,12 +3,25 @@
 @inject BotService _botService
 
 <h1>Control Panel</h1>
+<hr/>
 
-<button class="btn btn-danger" @onclick="KillContainers">Kill containers</button><br/><br/>
+<div id="stats">
+    <h2>Stats</h2>
+    <p>Coming soon...</p>
+</div>
+<hr/>
 
-<button class="btn btn-success" @onclick='() => StartContainer("docbot")'>Start DocBot</button> 
-<button class="btn btn-success" @onclick='() => StartContainer("dogbot")'>Start DogBot</button> 
-<button class="btn btn-success" @onclick='() => StartContainer("colorbot")'>Start ColorBot</button>
+<div id="commands">
+    <h2>Commands</h2>
+    
+    <h3>Stop Bot</h3>
+    <button class="btn btn-danger" @onclick="KillContainers">Kill All</button><br/><br/>
+    
+    <h3>Start Bot</h3>
+    <button class="btn btn-success" @onclick='() => StartContainer("docbot")'>Start DocBot</button>
+    <button class="btn btn-success" @onclick='() => StartContainer("dogbot")'>Start DogBot</button>
+    <button class="btn btn-success" @onclick='() => StartContainer("colorbot")'>Start ColorBot</button>
+</div>
 
 @code
 {
