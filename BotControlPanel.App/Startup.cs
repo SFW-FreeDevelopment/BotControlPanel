@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
@@ -36,7 +38,13 @@ namespace BotControlPanel.App
             var host = _configuration["Server:Host"];
             var username = _configuration["Server:Username"];
             var password = _configuration["Server:Password"];
-            var auth = new PasswordAuthenticationMethod(username, password);
+
+            PrivateKeyFile privateKey;
+            using (var stream = new MemoryStream(Encoding.ASCII.GetBytes(password)))
+            {
+                privateKey = new PrivateKeyFile(stream);
+            }
+            var auth = new PrivateKeyAuthenticationMethod(username, privateKey);
             services.AddTransient(_ => new ConnectionInfo(host, username, auth));
         }
 
