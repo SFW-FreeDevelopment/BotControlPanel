@@ -15,28 +15,27 @@ namespace BotControlPanel.App.Services
         public void RunImage(string imageName)
         {
             var command = DockerCommand.Run(imageName);
-
-            using var client = new SshClient(_connectionInfo);
-            client.Connect();
-            client.RunCommand(command);
+            RunCommand(command);
         }
         
         public void PullLatestImage(string imageName)
         {
             var command = DockerCommand.Pull(imageName);
-
-            using var client = new SshClient(_connectionInfo);
-            client.Connect();
-            client.RunCommand(command);
+            RunCommand(command);
         }
         
         public void KillContainer(string containerName)
         {
             var command = DockerCommand.Kill(containerName);
+            RunCommand(command);
+        }
 
+        private void RunCommand(string command)
+        {
             using var client = new SshClient(_connectionInfo);
             client.Connect();
             client.RunCommand(command);
+            client.Disconnect();
         }
     }
 }
