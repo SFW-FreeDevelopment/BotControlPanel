@@ -1,17 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using BotControlPanel.App.Data;
 using BotControlPanel.App.Services;
 using Renci.SshNet;
 
@@ -32,20 +25,8 @@ namespace BotControlPanel.App
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
             services.AddScoped<BotService>();
-
-            var host = _configuration["Server:Host"];
-            var username = _configuration["Server:Username"];
-            var password = _configuration["Server:Password"];
-
-            PrivateKeyFile privateKey;
-            using (var stream = new MemoryStream(Encoding.ASCII.GetBytes(password)))
-            {
-                privateKey = new PrivateKeyFile(stream);
-            }
-            var auth = new PrivateKeyAuthenticationMethod(username, privateKey);
-            services.AddTransient(_ => new ConnectionInfo(host, username, auth));
+            services.AddTransient(_ => BuildConnectionInfo());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,6 +53,22 @@ namespace BotControlPanel.App
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+        }
+
+        private ConnectionInfo BuildConnectionInfo()
+        {
+            var host = _configuration["Server:Host"];
+            var username = _configuration["Server:Username"];
+            var password = _configuration["Server:Password"];
+
+            PrivateKeyFile privateKey;
+            using (var stream = new MemoryStream(Encoding.ASCII.GetBytes(password)))
+            {
+                privateKey = new PrivateKeyFile(stream);
+            }
+            var auth = new PrivateKeyAuthenticationMethod(username, privateKey);
+
+            return new ConnectionInfo(host, username, auth);
         }
     }
 }
