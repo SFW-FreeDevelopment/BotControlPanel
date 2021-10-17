@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BotControlPanel.App.Commands;
+using BotControlPanel.App.Models;
 using Renci.SshNet;
 
 namespace BotControlPanel.App.Services
@@ -40,19 +41,31 @@ namespace BotControlPanel.App.Services
             RunCommand(command);
         }
 
-        public List<string> GetDockerStats()
+        public List<ContainerStatus> GetDockerStats()
         {
             var commandString = DockerCommand.Stats();
             
             using var client = new SshClient(_connectionInfo);
             client.Connect();
             var command = client.CreateCommand(commandString);
-            var value = command.Execute();
+            var output = command.Execute();
             client.Disconnect();
 
-            var containerStatusStrings = value.Split("\n").Skip(1).ToList();
-            
-            return containerStatusStrings;
+            return output.Split("\n")
+                .Skip(1)
+                .SkipLast(1)
+                .Select(str => str.Split("   ")
+                    .Where(s => s != "").ToArray())
+                .Select(row => new ContainerStatus
+                {
+                    ContainerId = row[0].Trim(),
+                    Image = row[1].Trim(),
+                    Command = row[2].Trim(),
+                    Created = row[3].Trim(),
+                    Status = row[4].Trim(),
+                    Names = row[5].Trim()
+                })
+                .ToList();
         }
         
         private void RunCommand(string command)
