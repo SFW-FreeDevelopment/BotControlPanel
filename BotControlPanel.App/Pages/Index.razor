@@ -4,32 +4,44 @@
 
 <h1>Control Panel</h1>
 <hr/>
-
-<div class="row">
+<div class="row" id="stats">
+    <div class="col-12">
+        <h2>Stats</h2>
+    </div>
     <div class="col-md-6">
-      <div id="stats">
-          <h2>Stats</h2>
-          <p>Coming soon...</p>
-      </div>
-      <hr/>
-      
-      <div id="commands">
-          <h2>Commands</h2>
-          
-          <h3>Stop Bot</h3>
-          <button class="btn btn-lg btn-danger btn-block" @onclick="KillContainers">Stop All</button><br/>
-          
-          <h3>Start Bot</h3>
-          <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("sgarberg/colorbot")'>Start ColorBot</button><br/>
-          <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("sgarberg/docbot")'>Start DocBot</button><br/>
-          <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("sgarberg/dogbot")'>Start DogBot</button><br/>
-          <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("chrisplummer/meltybot")'>Start MeltyBot</button>
-      </div>  
+        
+        <p>Coming soon...</p>
+        <hr/>        
+    </div>
+</div>
+<div class="row" id="commands">
+    <div class="col-12">
+        <h2>Commands</h2>
+    </div>
+    <div class="col-md-6">
+        <h3>Stop Bot</h3>
+        <button class="btn btn-lg btn-danger btn-block" @onclick="KillContainers">Stop All</button><br/>
+        <button class="btn btn-lg btn-danger btn-block" @onclick='() => KillContainer("colorbot")'>Stop ColorBot</button><br/>
+        <button class="btn btn-lg btn-danger btn-block" @onclick='() => KillContainer("docbot")'>Stop DocBot</button><br/>
+        <button class="btn btn-lg btn-danger btn-block" @onclick='() => KillContainer("dogbot")'>Stop DogBot</button><br/>
+        <button class="btn btn-lg btn-danger btn-block" @onclick='() => KillContainer("meltybot")'>Stop MeltyBot</button><br/>
+    </div>
+    <div class="col-md-6">
+        <h3>Start Bot</h3>
+        <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("colorbot")'>Start ColorBot</button><br/>
+        <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("docbot")'>Start DocBot</button><br/>
+        <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("dogbot")'>Start DogBot</button><br/>
+        <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("meltybot")'>Start MeltyBot</button><br/>
     </div>
 </div>
 
 @code
 {
+    private void KillContainer(string name)
+    {
+        _botService.KillContainer(name);
+    }
+    
     private void KillContainers()
     {
         _botService.KillAllContainers();
