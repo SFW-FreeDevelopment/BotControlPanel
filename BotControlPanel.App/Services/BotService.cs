@@ -65,6 +65,7 @@ namespace BotControlPanel.App.Services
                     Status = row[4].Trim(),
                     Names = row[5].Trim()
                 })
+                .OrderBy(container => container.Image)
                 .ToList();
         }
         
