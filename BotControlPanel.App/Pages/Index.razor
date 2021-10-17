@@ -9,8 +9,22 @@
         <h2>Stats</h2>
     </div>
     <div class="col-md-6">
-        
-        <p>Coming soon...</p>
+        <div id="docker-stats">
+            @if (_containerStatuses == null || !_containerStatuses.Any())
+            {
+                @:<p>Container status has not been fetched or no containers are running.</p>
+            }
+            else
+            {
+                foreach (var containerStatus in _containerStatuses)
+                {
+                    @containerStatus<br/>
+                }   
+            }
+            <br/>
+            Last fetch: @(_lastFetch == null ? "Never" : _lastFetch.Value)
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" @onclick="GetStats">Get Stats</button><br/>
         <hr/>        
     </div>
 </div>
@@ -37,6 +51,15 @@
 
 @code
 {
+    private List<string> _containerStatuses = new List<string>();
+    private DateTime? _lastFetch;
+
+    private void GetStats()
+    {
+        _containerStatuses = _botService.GetDockerStats();
+        _lastFetch = DateTime.Now;
+    }
+    
     private void KillContainer(string name)
     {
         _botService.KillContainer(name);
