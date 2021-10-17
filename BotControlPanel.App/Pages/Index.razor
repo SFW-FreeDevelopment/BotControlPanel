@@ -7,7 +7,7 @@
 <hr/>
 <div class="row" id="stats">
     <div class="col-12">
-        <h2>Stats</h2>
+        <h2><span class="oi oi-graph" aria-hidden="true"></span> Stats</h2>
     </div>
     <div class="col-md-12">
         <div id="docker-stats">
@@ -52,10 +52,10 @@
 </div>
 <div class="row" id="commands">
     <div class="col-12">
-        <h2>Commands</h2>
+        <h2><span class="oi oi-command" aria-hidden="true"></span> Commands</h2>
     </div>
     <div class="col-md-6">
-        <h3>Stop Bot</h3>
+        <h3>Stop Bot Instances</h3>
         <button class="btn btn-lg btn-danger btn-block" @onclick="KillContainers">Stop All</button><br/>
         <button class="btn btn-lg btn-danger btn-block" @onclick='() => KillContainer("colorbot")'>Stop ColorBot</button><br/>
         <button class="btn btn-lg btn-danger btn-block" @onclick='() => KillContainer("docbot")'>Stop DocBot</button><br/>
@@ -63,7 +63,8 @@
         <button class="btn btn-lg btn-danger btn-block" @onclick='() => KillContainer("meltybot")'>Stop MeltyBot</button><br/>
     </div>
     <div class="col-md-6">
-        <h3>Start Bot</h3>
+        <h3>Start Bot Instances</h3>
+        <button class="btn btn-lg btn-success btn-block" @onclick="StartAllContainers">Start All</button><br/>
         <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("colorbot")'>Start ColorBot</button><br/>
         <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("docbot")'>Start DocBot</button><br/>
         <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("dogbot")'>Start DogBot</button><br/>
@@ -76,6 +77,12 @@
     private List<ContainerStatus> _containerStatuses = new List<ContainerStatus>();
     private DateTime? _lastFetch;
 
+    protected override async Task OnInitializedAsync()
+    {
+        GetStats();
+        await Task.CompletedTask;
+    }
+    
     private void GetStats()
     {
         _containerStatuses = _botService.GetDockerStats();
@@ -85,15 +92,27 @@
     private void KillContainer(string name)
     {
         _botService.KillContainer(name);
+        GetStats();
     }
     
     private void KillContainers()
     {
         _botService.KillAllContainers();
+        GetStats();
     }
 
     private void StartContainer(string name)
     {
         _botService.RunImage(name);
+        GetStats();
+    }
+
+    private void StartAllContainers()
+    {
+        _botService.RunImage("colorbot");
+        _botService.RunImage("docbot");
+        _botService.RunImage("dogbot");
+        _botService.RunImage("meltybot");
+        GetStats();
     }
 }
