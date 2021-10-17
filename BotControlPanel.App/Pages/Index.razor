@@ -26,18 +26,22 @@
                             <th>Created</th>
                             <th>Status</th>
                             <th>Names</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach (var containerStatus in _containerStatuses)
+                    @foreach (var container in _containerStatuses)
                     {
                         <tr>
-                            <td>@containerStatus.ContainerId</td>
-                            <td>@containerStatus.Image</td>
-                            <td>@containerStatus.Command</td>
-                            <td>@containerStatus.Created</td>
-                            <td>@containerStatus.Status</td>
-                            <td>@containerStatus.Names</td>
+                            <td>@container.ContainerId</td>
+                            <td>@container.Image</td>
+                            <td>@container.Command</td>
+                            <td>@container.Created</td>
+                            <td>@container.Status</td>
+                            <td>@container.Names</td>
+                            <td>
+                                <button class="btn btn-lg btn-danger btn-block" @onclick='() => KillContainer(container.Names)'>Stop @container.Names</button><br/>
+                            </td>
                         </tr>
                     }   
                     </tbody>
@@ -71,16 +75,22 @@
         <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("meltybot")'>Start MeltyBot</button><br/>
     </div>
 </div>
+@if (_locked)
+{
+    <div style="background: black; position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 100;">
+        <p style="font-size: xxx-large">Please wait...</p>
+    </div>
+}
 
 @code
 {
     private List<ContainerStatus> _containerStatuses = new List<ContainerStatus>();
     private DateTime? _lastFetch;
+    private bool _locked;
 
     protected override async Task OnInitializedAsync()
     {
         GetStats();
-        await Task.CompletedTask;
     }
     
     private void GetStats()
@@ -91,28 +101,44 @@
     
     private void KillContainer(string name)
     {
+        if (_locked) return;
+        
+        _locked = true;
         _botService.KillContainer(name);
         GetStats();
+        _locked = false;
     }
     
     private void KillContainers()
     {
+        if (_locked) return;
+        
+        _locked = true;
         _botService.KillAllContainers();
         GetStats();
+        _locked = false;
     }
 
     private void StartContainer(string name)
     {
+        if (_locked) return;
+        
+        _locked = true;
         _botService.RunImage(name);
         GetStats();
+        _locked = false;
     }
 
     private void StartAllContainers()
     {
+        if (_locked) return;
+        
+        _locked = true;
         _botService.RunImage("colorbot");
         _botService.RunImage("docbot");
         _botService.RunImage("dogbot");
         _botService.RunImage("meltybot");
         GetStats();
+        _locked = false;
     }
 }
