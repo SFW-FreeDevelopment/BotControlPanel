@@ -9,7 +9,7 @@
         
         public static string Run(string imageName)
         {
-            return $"sudo docker container run {imageName}";
+            return $"sudo docker container start {imageName}";
         }
         
         public static string Pull(string imageName)
@@ -24,7 +24,7 @@
 
         public static string KillAll()
         {
-            return "docker stop $(docker ps -a -q)";
+            return "sudo docker stop $(docker ps -a -q)";
         }
     }
 }
