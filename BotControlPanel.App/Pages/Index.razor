@@ -1,5 +1,6 @@
 @page "/"
 @using BotControlPanel.App.Services
+@using BotControlPanel.App.Models
 @inject BotService _botService
 
 <h1>Control Panel</h1>
@@ -8,7 +9,7 @@
     <div class="col-12">
         <h2>Stats</h2>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div id="docker-stats">
             @if (_containerStatuses == null || !_containerStatuses.Any())
             {
@@ -16,15 +17,36 @@
             }
             else
             {
-                foreach (var containerStatus in _containerStatuses)
-                {
-                    @containerStatus<br/>
-                }   
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Container ID</th>
+                            <th>Image</th>
+                            <th>Command</th>
+                            <th>Created</th>
+                            <th>Status</th>
+                            <th>Names</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var containerStatus in _containerStatuses)
+                    {
+                        <tr>
+                            <td>@containerStatus.ContainerId</td>
+                            <td>@containerStatus.Image</td>
+                            <td>@containerStatus.Command</td>
+                            <td>@containerStatus.Created</td>
+                            <td>@containerStatus.Status</td>
+                            <td>@containerStatus.Names</td>
+                        </tr>
+                    }   
+                    </tbody>
+                </table>
             }
             <br/>
             Last fetch: @(_lastFetch == null ? "Never" : _lastFetch.Value)
         </div>
-        <button class="btn btn-lg btn-primary btn-block" @onclick="GetStats">Get Stats</button><br/>
+        <button class="btn btn-lg btn-primary" @onclick="GetStats">Get Stats</button><br/>
         <hr/>        
     </div>
 </div>
@@ -51,7 +73,7 @@
 
 @code
 {
-    private List<string> _containerStatuses = new List<string>();
+    private List<ContainerStatus> _containerStatuses = new List<ContainerStatus>();
     private DateTime? _lastFetch;
 
     private void GetStats()
