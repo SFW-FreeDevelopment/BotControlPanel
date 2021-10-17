@@ -21,5 +21,10 @@
         {
             return $"sudo docker kill {containerName}";
         }
+
+        public static string KillAll()
+        {
+            return "docker stop $(docker ps -a -q)";
+        }
     }
 }
