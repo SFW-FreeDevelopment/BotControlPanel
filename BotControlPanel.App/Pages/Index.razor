@@ -60,19 +60,26 @@
     </div>
     <div class="col-md-6">
         <h3>Stop Bot Instances</h3>
-        <button class="btn btn-lg btn-danger btn-block" @onclick="KillContainers">Stop All</button><br/>
-        <button class="btn btn-lg btn-danger btn-block" @onclick='() => KillContainer("colorbot")'>Stop ColorBot</button><br/>
-        <button class="btn btn-lg btn-danger btn-block" @onclick='() => KillContainer("docbot")'>Stop DocBot</button><br/>
-        <button class="btn btn-lg btn-danger btn-block" @onclick='() => KillContainer("dogbot")'>Stop DogBot</button><br/>
-        <button class="btn btn-lg btn-danger btn-block" @onclick='() => KillContainer("meltybot")'>Stop MeltyBot</button><br/>
+        @if (_containerStatuses?.Any() ?? false)
+        {
+            <button class="btn btn-lg btn-danger btn-block" @onclick="KillContainers">Stop all</button><br/>
+            foreach (var container in _containerStatuses)
+            {
+                <button class="btn btn-lg btn-danger btn-block" @onclick='() => KillContainer(container.Names)'>Stop @container.Names</button><br/>
+            }
+        }
+        else
+        {
+            @:There are no containers running.
+        }
     </div>
     <div class="col-md-6">
         <h3>Start Bot Instances</h3>
-        <button class="btn btn-lg btn-success btn-block" @onclick="StartAllContainers">Start All</button><br/>
-        <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("colorbot")'>Start ColorBot</button><br/>
-        <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("docbot")'>Start DocBot</button><br/>
-        <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("dogbot")'>Start DogBot</button><br/>
-        <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("meltybot")'>Start MeltyBot</button><br/>
+        <button class="btn btn-lg btn-success btn-block" @onclick="StartAllContainers">Start all</button><br/>
+        <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("colorbot")'>Start colorbot</button><br/>
+        <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("docbot")'>Start docbot</button><br/>
+        <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("dogbot")'>Start dogbot</button><br/>
+        <button class="btn btn-lg btn-success btn-block" @onclick='() => StartContainer("meltybot")'>Start meltybot</button><br/>
     </div>
 </div>
 @if (_locked)
