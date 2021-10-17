@@ -4,7 +4,7 @@
     {
         public static string Stats()
         {
-            return "sudo docker stats";
+            return "sudo docker container ls";
         }
         
         public static string Run(string imageName)
