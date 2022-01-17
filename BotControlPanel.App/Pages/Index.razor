@@ -41,6 +41,7 @@
                             <td>@container.Names</td>
                             <td>
                                 <button class="btn btn-lg btn-danger btn-block" @onclick='() => KillContainer(container.Names)'>Stop @container.Names</button><br/>
+                                <button class="btn btn-lg btn-warning btn-block" @onclick='() => UpdateContainer(container.Names, container.Image)'>Update @container.Names</button><br/>
                             </td>
                         </tr>
                     }   
@@ -132,6 +133,16 @@
         
         _locked = true;
         _botService.RunImage(name);
+        GetStats();
+        _locked = false;
+    }
+
+    private void UpdateContainer(string containerName, string imageName)
+    {
+        if (_locked) return;
+        
+        _locked = true;
+        _botService.UpdateContainer(containerName, imageName);
         GetStats();
         _locked = false;
     }

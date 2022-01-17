@@ -34,6 +34,21 @@ namespace BotControlPanel.App.Services
             var command = DockerCommand.Kill(containerName);
             RunCommand(command);
         }
+
+        public void UpdateContainer(string containerName, string imageName)
+        {
+            var command = DockerCommand.Kill(containerName);
+            RunCommand(command);
+
+            command = DockerCommand.Remove(containerName);
+            RunCommand(command);
+
+            command = DockerCommand.Pull(imageName);
+            RunCommand(command);
+            
+            command = DockerCommand.Run(imageName);
+            RunCommand(command);
+        }
         
         public void KillAllContainers()
         {
