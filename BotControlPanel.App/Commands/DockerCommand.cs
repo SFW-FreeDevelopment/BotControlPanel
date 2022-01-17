@@ -26,5 +26,10 @@
         {
             return "sudo docker stop $(docker ps -a -q)";
         }
+
+        public static string Remove(string containerName)
+        {
+            return $"sudo docker rm {containerName}";
+        }
     }
 }
